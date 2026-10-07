@@ -3,6 +3,7 @@ import { PromptInput } from './components/PromptInput';
 import { ComponentCard } from './components/ComponentCard';
 import { Window } from './components/Window';
 import { useComponentGenerator } from './hooks/useComponentGenerator';
+import { usePersistentState } from './hooks/usePersistentState';
 import type { Provider } from './types';
 import './App.css';
 
@@ -11,16 +12,38 @@ const PROVIDER_CONFIG = {
   google: { label: 'Google', placeholder: 'AIza...' },
 } as const;
 
+const PROVIDER_KEY = 'rcg:provider';
+const API_KEYS_KEY = 'rcg:apiKeys';
+
+function parseProvider(raw: unknown): Provider {
+  return raw === 'anthropic' || raw === 'google' ? raw : 'google';
+}
+
+function parseApiKeys(raw: unknown): Record<Provider, string> {
+  const stored = (typeof raw === 'object' && raw !== null ? raw : {}) as Record<string, unknown>;
+  return {
+    anthropic: typeof stored.anthropic === 'string' ? stored.anthropic : '',
+    google: typeof stored.google === 'string' ? stored.google : '',
+  };
+}
+
 function App() {
-  const [apiKey, setApiKey] = useState('');
+  const [apiKeys, setApiKeys] = usePersistentState<Record<Provider, string>>(
+    API_KEYS_KEY,
+    { anthropic: '', google: '' },
+    parseApiKeys,
+  );
   const [showKey, setShowKey] = useState(false);
-  const [provider, setProvider] = useState<Provider>('google');
+  const [provider, setProvider] = usePersistentState<Provider>(PROVIDER_KEY, 'google', parseProvider);
   const [envKeys, setEnvKeys] = useState<Record<Provider, boolean>>({
     anthropic: false,
     google: false,
   });
-  const { components, isLoading, error, generate, removeComponent, clearAll } =
+  const { components, history, isLoading, error, generate, removeComponent, clearAll } =
     useComponentGenerator();
+  // 키는 제공자별로 따로 보관한다. 다른 제공자의 키가 요청에 실려 가지 않게 하는 장치다.
+  const apiKey = apiKeys[provider];
+  const setApiKey = (value: string) => setApiKeys((prev) => ({ ...prev, [provider]: value }));
 
   useEffect(() => {
     fetch('/api/config')
@@ -37,11 +60,6 @@ function App() {
       return;
     }
     generate(prompt, apiKey || undefined, provider);
-  };
-
-  const handleProviderChange = (newProvider: Provider) => {
-    setProvider(newProvider);
-    setApiKey('');
   };
 
   const activeProvider = PROVIDER_CONFIG[provider].label;
@@ -67,7 +85,7 @@ function App() {
 
       <main className="workspace">
         <Window title="새 컴포넌트" className="win-composer">
-          <PromptInput onGenerate={handleGenerate} isLoading={isLoading} />
+          <PromptInput onGenerate={handleGenerate} isLoading={isLoading} history={history} />
         </Window>
 
         <Window title="실행 설정" className="win-settings">
@@ -76,7 +94,7 @@ function App() {
             <select
               id="provider"
               value={provider}
-              onChange={(e) => handleProviderChange(e.target.value as Provider)}
+              onChange={(e) => setProvider(e.target.value as Provider)}
             >
               {Object.entries(PROVIDER_CONFIG).map(([key, { label }]) => (
                 <option key={key} value={key}>

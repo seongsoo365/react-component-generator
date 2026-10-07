@@ -27,6 +27,8 @@ Vite + React 19 프론트엔드. `/api/generate`로 프롬프트를 보내 받�
 
 - Do: 미리보기는 `<LiveProvider noInline>`을 유지한다 (`src/components/LivePreview.tsx:74`). `noInline`을 제거하면 `render()` 호출 기반의 생성 코드가 동작하지 않는다.
 - Do: 서버 오류 응답은 `data.error`를 사용자에게 표시한다 (`src/hooks/useComponentGenerator.ts:31-33`). 서버가 한국어 오류 문구를 내려주므로 클라이언트에서 임의 문구로 덮어쓰지 않는다.
-- Do: 프로바이더를 바꿀 때 입력한 API 키를 초기화한다 (`src/App.tsx:42-45`). 다른 프로바이더로 키가 전송되는 것을 막는 동작이므로 제거하지 않는다.
-- Don't: API 키를 `localStorage` 등에 저장하지 않는다. 현재는 컴포넌트 state에만 존재한다 (`src/App.tsx:15`).
+- Do: API 키는 프로바이더별로 따로 보관한다 (`src/App.tsx`의 `apiKeys: Record<Provider, string>`). 다른 프로바이더의 키가 요청에 실리는 것을 막는 동작이므로 단일 `apiKey` 문자열로 합치지 않는다.
+- Do: 새로고침 후에도 유지할 상태는 `usePersistentState`와 `parse` 함수로 저장한다 (`src/hooks/usePersistentState.ts`). 저장 키는 `rcg:` 접두사를 쓴다 (`rcg:provider`, `rcg:apiKeys`, `rcg:promptHistory`, `rcg:components`). `parse`는 형식이 잘못된 저장값을 걸러내야 한다. `localStorage`를 컴포넌트에서 직접 호출하지 않고 `src/utils/storage.ts`를 거친다.
+- Do: `Date`는 JSON에서 문자열이 되므로 복원 로직을 유지한다 (`src/hooks/useComponentGenerator.ts`의 `parseComponents`).
+- Don't: API 키를 `rcg:apiKeys` 외의 곳에 저장하거나 로그로 남기지 않는다. 키는 `localStorage`에 평문으로 저장되며, 생성 코드는 같은 origin에서 react-live로 실행되므로 생성 코드가 `localStorage`를 읽을 수 있다. 미리보기 격리(iframe sandbox 등) 없이 이 위험을 가정하고 작업한다.
 - Don't: 생성된 `code`를 `dangerouslySetInnerHTML`이나 `eval`로 직접 실행하지 않는다. 실행은 react-live를 통해서만 한다.
