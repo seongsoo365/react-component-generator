@@ -26,4 +26,39 @@ describe('PromptInput', () => {
     render(<PromptInput onGenerate={vi.fn()} isLoading={true} />);
     expect(screen.getByRole('button', { name: '생성 중...' })).toBeDisabled();
   });
+
+  it('입력한 글자 수를 "현재/500" 형식으로 보여준다', async () => {
+    const user = userEvent.setup();
+    render(<PromptInput onGenerate={vi.fn()} isLoading={false} />);
+
+    await user.type(screen.getByRole('textbox'), '카드');
+    expect(screen.getByText('2/500')).toBeInTheDocument();
+  });
+
+  it('500자까지는 경고 없이 생성 버튼이 활성이다', async () => {
+    const user = userEvent.setup();
+    render(<PromptInput onGenerate={vi.fn()} isLoading={false} />);
+
+    await user.click(screen.getByRole('textbox'));
+    await user.paste('가'.repeat(500));
+
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '컴포넌트 생성' })).toBeEnabled();
+  });
+
+  it('500자를 넘으면 경고를 보여주고 생성 버튼이 비활성이며 onGenerate가 호출되지 않는다', async () => {
+    const onGenerate = vi.fn();
+    const user = userEvent.setup();
+    render(<PromptInput onGenerate={onGenerate} isLoading={false} />);
+
+    await user.click(screen.getByRole('textbox'));
+    await user.paste('가'.repeat(501));
+
+    expect(screen.getByRole('alert')).toHaveTextContent('500자');
+    const submit = screen.getByRole('button', { name: '컴포넌트 생성' });
+    expect(submit).toBeDisabled();
+
+    await user.type(screen.getByRole('textbox'), '{Control>}{Enter}{/Control}');
+    expect(onGenerate).not.toHaveBeenCalled();
+  });
 });

@@ -323,6 +323,19 @@ button.win-close::after {
   transform: translate(4px, 4px);
 }
 
+.prompt-counter {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 8px;
+  font-size: 0.86rem;
+}
+
+.prompt-counter-over {
+  font-weight: 700;
+  color: #d62828;
+}
+
 .prompt-examples {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
