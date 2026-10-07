@@ -1,0 +1,680 @@
+/* ───────── 레이아웃 ───────── */
+.app {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  padding: 0 24px 48px;
+}
+
+/* ───────── 메뉴 바 ───────── */
+.menubar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 0 -24px 28px;
+  padding: 6px 24px;
+  background: var(--paper);
+  border-bottom: 2px solid var(--ink);
+}
+
+.menubar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+}
+
+.brand-mark {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  background: var(--ink);
+  color: var(--yellow);
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.menubar-status {
+  display: flex;
+  gap: 20px;
+}
+
+.menubar-status div {
+  display: flex;
+  gap: 8px;
+}
+
+.menubar-status dt {
+  color: #4a4c55;
+}
+
+.menubar-status dd {
+  font-weight: 700;
+}
+
+/* ───────── 창 ───────── */
+.win {
+  background: var(--plat);
+  border: 2px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  min-width: 0;
+}
+
+.win-title {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 10px;
+  background: var(--paper);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--ink) 0,
+    var(--ink) 2px,
+    transparent 2px,
+    transparent 5px
+  );
+  background-size: 100% 18px;
+  background-repeat: no-repeat;
+  background-position: 0 center;
+  border-bottom: 2px solid var(--ink);
+}
+
+.win-title h2 {
+  position: relative;
+  max-width: calc(100% - 64px);
+  padding: 0 12px;
+  background: var(--paper);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 28px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.win-close {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  padding: 0;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  cursor: pointer;
+}
+
+.win-close--static {
+  cursor: default;
+}
+
+button.win-close:hover {
+  background: var(--red);
+}
+
+button.win-close:active {
+  background: var(--ink);
+}
+
+/* 터치 영역 확장 */
+button.win-close::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+}
+
+.win-body {
+  padding: 20px;
+}
+
+/* ───────── 작업 영역 ───────── */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 28px;
+  align-items: start;
+  margin-bottom: 28px;
+}
+
+.win-settings {
+  background: var(--yellow);
+}
+
+.win-settings .win-title {
+  background-color: var(--yellow);
+}
+
+.win-settings .win-title h2 {
+  background: var(--yellow);
+}
+
+.field + .field {
+  margin-top: 18px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+/* ───────── 입력 요소 ───────── */
+.field select,
+.api-key-field input,
+.prompt-textarea {
+  width: 100%;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  box-shadow: inset 2px 2px 0 rgba(16, 16, 20, 0.18);
+}
+
+.field select {
+  height: 40px;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.api-key-field {
+  display: flex;
+  gap: 8px;
+}
+
+.api-key-field input {
+  min-width: 0;
+  height: 40px;
+  padding: 0 10px;
+  font-family: var(--font-code);
+  font-size: 0.86rem;
+}
+
+.api-key-field input::placeholder,
+.prompt-textarea::placeholder {
+  color: #6b6d78;
+}
+
+.field select:focus-visible,
+.api-key-field input:focus-visible,
+.prompt-textarea:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 0;
+}
+
+.key-status {
+  margin-top: 10px;
+  padding-left: 22px;
+  position: relative;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.key-status::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 5px;
+  width: 11px;
+  height: 11px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+}
+
+.key-status--ready {
+  font-weight: 700;
+}
+
+.key-status--ready::before {
+  background: var(--green);
+}
+
+/* ───────── 버튼 ───────── */
+.btn {
+  min-height: 36px;
+  padding: 0 14px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  box-shadow: 2px 2px 0 var(--ink);
+  cursor: pointer;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--yellow);
+}
+
+.btn:active:not(:disabled) {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: none;
+  transform: translate(2px, 2px);
+}
+
+.btn:disabled {
+  background: var(--plat);
+  color: #6b6d78;
+  border-color: #6b6d78;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.btn-refresh {
+  width: 36px;
+  padding: 0;
+  font-size: 1.05rem;
+}
+
+.btn-clear:hover:not(:disabled) {
+  background: var(--red);
+  color: var(--paper);
+}
+
+.btn-copy {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--paper);
+  box-shadow: 2px 2px 0 var(--orange);
+}
+
+.btn-copy:hover:not(:disabled) {
+  background: var(--orange);
+  color: var(--ink);
+}
+
+/* ───────── 프롬프트 ───────── */
+.prompt-lead {
+  max-width: 62ch;
+  margin-bottom: 16px;
+}
+
+.prompt-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: end;
+}
+
+.prompt-textarea {
+  min-height: 140px;
+  padding: 14px;
+  resize: vertical;
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.btn-generate {
+  height: 52px;
+  padding: 0 22px;
+  background: var(--orange);
+  box-shadow: 4px 4px 0 var(--ink);
+  font-size: 1rem;
+}
+
+.btn-generate:hover:not(:disabled) {
+  background: #ff9340;
+}
+
+.btn-generate:active:not(:disabled) {
+  transform: translate(4px, 4px);
+}
+
+.prompt-examples {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.examples-label {
+  grid-column: 1 / -1;
+  font-weight: 700;
+}
+
+.example-chip {
+  min-height: 64px;
+  padding: 10px 12px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.example-chip:hover {
+  background: var(--blue);
+  color: var(--paper);
+}
+
+/* ───────── 오류 ───────── */
+.error-banner {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 28px;
+  padding: 12px 16px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--red);
+}
+
+.error-icon {
+  display: grid;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  background: var(--red);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  color: var(--paper);
+  font-weight: 700;
+}
+
+.error-banner p {
+  line-height: 1.5;
+}
+
+/* ───────── 결과 영역 ───────── */
+.results-section {
+  min-height: 280px;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 8px 12px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+}
+
+.results-header h2 {
+  font-size: 1rem;
+}
+
+.results-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.win-empty,
+.win-loading {
+  margin-bottom: 28px;
+}
+
+/* 빈 상태 */
+.empty-state {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  padding: 12px;
+}
+
+.empty-icon {
+  position: relative;
+  flex: 0 0 auto;
+  width: 96px;
+  height: 78px;
+}
+
+.empty-icon-tab {
+  width: 40px;
+  height: 14px;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-bottom: 0;
+}
+
+.empty-icon-body {
+  height: 64px;
+  background: var(--yellow);
+  background-image: radial-gradient(var(--ink) 1px, transparent 1.5px);
+  background-size: 4px 4px;
+  border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.empty-copy h3 {
+  margin-bottom: 6px;
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+.empty-copy p {
+  max-width: 52ch;
+}
+
+/* 로딩 */
+.loading-card {
+  display: grid;
+  gap: 14px;
+  padding: 8px 4px;
+}
+
+.progress {
+  height: 22px;
+  padding: 2px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 40%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--blue) 0,
+    var(--blue) 10px,
+    transparent 10px,
+    transparent 13px
+  );
+  animation: progress-slide 1.4s steps(12) infinite;
+}
+
+@keyframes progress-slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+/* ───────── 컴포넌트 창 ───────── */
+.component-card .win-body {
+  padding: 0;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: start;
+  padding: 16px 20px;
+}
+
+.card-prompt {
+  max-width: 70ch;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.card-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.card-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 20px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.tab {
+  min-height: 36px;
+  padding: 0 20px;
+  background: var(--plat);
+  border: 2px solid var(--ink);
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  font-weight: 700;
+  transform: translateY(2px);
+}
+
+.tab:hover {
+  background: var(--yellow);
+}
+
+.tab--active,
+.tab--active:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.card-content {
+  min-height: 280px;
+  background: var(--paper);
+}
+
+.preview-panel,
+.code-panel {
+  height: 100%;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 20px;
+  background: var(--plat);
+  border-bottom: 2px solid var(--ink);
+}
+
+.panel-header h3 {
+  font-size: 0.9rem;
+}
+
+.preview-content {
+  padding: 20px;
+}
+
+.preview-render {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 320px;
+  padding: 34px;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(#c7d3e6 1px, transparent 1px),
+    linear-gradient(90deg, #c7d3e6 1px, transparent 1px);
+  background-size: 24px 24px;
+  border: 2px solid var(--ink);
+  box-shadow: inset 3px 3px 0 rgba(16, 16, 20, 0.14);
+}
+
+.preview-error {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: var(--paper);
+  border: 2px solid var(--red);
+  color: var(--red);
+  font-family: var(--font-code);
+  font-size: 0.84rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.code-block {
+  min-height: 320px;
+  margin: 0;
+  padding: 22px;
+  overflow-x: auto;
+  background: #15110a;
+  color: #ffb938;
+  font-family: var(--font-code);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+/* ───────── 반응형 ───────── */
+@media (max-width: 960px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .app {
+    padding: 0 14px 36px;
+  }
+
+  .menubar {
+    margin: 0 -14px 20px;
+    padding: 6px 14px;
+  }
+
+  .menubar-brand strong {
+    display: none;
+  }
+
+  .win {
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .win-body {
+    padding: 14px;
+  }
+
+  .prompt-form,
+  .prompt-examples {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-generate {
+    width: 100%;
+  }
+
+  .empty-state {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px;
+  }
+
+  .card-tabs {
+    padding: 0 14px;
+  }
+
+  .card-actions .btn-regenerate {
+    flex: 1;
+  }
+
+  .preview-content {
+    padding: 14px;
+  }
+
+  .preview-render {
+    min-height: 240px;
+    padding: 18px;
+  }
+}
