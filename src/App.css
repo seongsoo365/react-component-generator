@@ -359,6 +359,14 @@ button.win-close::after {
   text-align: left;
 }
 
+/* 히스토리는 최대 500자까지 길어질 수 있어 두 줄로 줄인다. */
+.history-chip {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
 .example-chip:hover {
   background: var(--blue);
   color: var(--paper);
