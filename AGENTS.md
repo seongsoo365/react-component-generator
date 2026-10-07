@@ -32,7 +32,8 @@
 
 ### Test Boundary
 
-- 테스트가 있는 영역: `server/fallback.ts`, `server/generator.ts`(순수 함수), `src/components/PromptInput.tsx`. 테스트가 없는 영역: `server/index.ts`, `src/App.tsx`, `src/hooks/`, `LivePreview`, `CodeView`.
+- 테스트가 있는 영역: `server/fallback.ts`, `server/generator.ts`(순수 함수), `src/App.tsx`, `src/hooks/`, `src/utils/`, `src/components/PromptInput.tsx`. 테스트가 없는 영역: `server/index.ts`, `LivePreview`, `CodeView`, `ComponentCard`.
+- `src/test/setup.ts`가 테스트마다 `localStorage.clear()`를 실행한다. 영속 상태를 다루는 테스트는 이 격리에 의존한다.
 - 서버에 새 순수 로직을 추가할 때는 `server/index.ts`(`Bun.serve` 부수효과)에 넣지 말고 `server/generator.ts`나 `server/fallback.ts`처럼 별도 모듈로 분리해 테스트를 함께 작성한다 (`server/generator.ts:1-2`).
 
 ### Double Defense
